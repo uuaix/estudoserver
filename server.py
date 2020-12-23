@@ -1,12 +1,14 @@
 import os
 from flask import Flask, session, jsonify, url_for, request
+from flask_cors import CORS
 from markupsafe import escape
 
 app = Flask(__name__)
+CORS(app)
 
-# # Set the secret key to some random bytes. Keep this really secret!
-# app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-#
+# Set the secret key to some random bytes. Keep this really secret!
+app.secret_key = b'_5ajiQ@#SDF%9RF4Q8z\n\xec]/'
+
 
 # Baisc Data Model 4 User ----------------
 
@@ -80,20 +82,17 @@ def users_api():
 @app.route("/get_classes")
 def get_classes():
     classesList = []
-    with os.scandir('./data/') as entries:
+    with os.scandir('./static/') as entries:
         for entry in entries:
             classesList.append(entry.name)
-            print(entry.name)
-            print(entry)
         return jsonify(classesList)
 
 
 @app.route("/get_classes/<id>")
 def get_class(id=None):
     media_url_list = []
-    with os.scandir('./data/' + id) as entries:
+    with os.scandir('./static/' + id) as entries:
         for entry in entries:
-            print(entry.name)
-            url = url_for('static', filename=entry.name)
+            url = url_for('static', filename=id+'/'+entry.name)
             media_url_list.append(url)
     return jsonify(media_url_list)
